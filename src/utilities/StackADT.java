@@ -1,55 +1,69 @@
 package utilities;
-//array list
 
+import java.util.*;
+
+//array list
 /*
  *  appropriate pre-conditions, post-conditions,
 	parameters, return values and expected exceptions using proper Javadoc notations
  */
-public interface StackADT {
-
+public interface StackADT<E> {
+ 
 	
+	// Person 1 (Prithvi)
 	
-    /**
+	/**
      * The ability to add to the top of a stack
      * Precondition: the value to be added must not be null, and the stack must not be full.
-     * Postcondition: the value is added to the top of the stack, and the size of the stack is increased by one. the size of the stack after the value is added to the top of the stack is returned.
+     * Postcondition: the value is added to the top of the stack, and the size of the stack is increased by one. 
      * @param value the value to be added to the top of the stack
      * @throws NullPointerException if the value to be added is null
      * @throws IllegalStateException if the stack is full
-     * @return the size of the stack after the value is added to the top of the stack
      * 
      *
      */
-    void push();
-
-
+    void push(E value) throws NullPointerException, IllegalStateException;
     /**
      * The ability to remove the element from the top of the stack
-     * Precondition:
-     * Postcondition:
-     * @param
-     * @throws
+     * Precondition: the stack must not be empty.
+     * Postcondition: the element at the top of the stack is removed, and the size of the stack is decreased by one. The element that was removed from the top of the stack is returned.
+     * @return the element that was removed from the top of the stack
+     * @throws EmptyStackException if the stack is empty
      *
      *
      *
      */
-
-
-    void pop();
+    
+    E pop() throws EmptyStackException;
 
     /**
-     * The ability to look up the first value within the stack ( the one at the very top of the stack)
-     * Precondition: A stack must exist
-     * Postcondition: returns value at the top of the stack
-     * @param
-     * @returns returns value at the top of the stack
+     * The ability to look up the first value within the stack (the one at the very top of the stack)
+     * Precondition: Stack must not be empty.
+     * Postcondition: The element at the top of the stack is returned and the stack remains unchanged.
+     * @return returns value at the top of the stack
+     * @throws EmptyStackException if the stack is empty
      */
+    E peek() throws EmptyStackException;
+    
+    
+    // Person 2 ()
+	boolean equals(StackADT<E> that);
 
-    V peek();
+    Iterator<E> iterator();
+    
+    Object[] toArray();
 
+    E[] toArray(E[] copy);
 
+    int search(E obj);
 
+    boolean contains(E obj);
 
+    int size();
+
+    boolean isEmpty();
+
+    void clear();
 
 
 
