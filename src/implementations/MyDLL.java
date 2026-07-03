@@ -8,7 +8,7 @@ import utilities.ListADT;
 
 /**
  * @author Deema
- * @version 0.1
+ * @version 1
  * @param <E> type of the items stored in the DLL
  */
 public class MyDLL<E> implements ListADT<E>{
