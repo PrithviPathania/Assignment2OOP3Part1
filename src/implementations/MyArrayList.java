@@ -88,7 +88,9 @@ public class MyArrayList<E> implements ListADT<E> {
 		if (toAdd == null) {
 			throw new NullPointerException();
 		}
-		else if (index >= size || index < 0) {
+		
+		
+		if (index > size || index < 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		else {
@@ -285,7 +287,9 @@ public class MyArrayList<E> implements ListADT<E> {
 	 */
 	@Override
 	public boolean contains(E toFind) throws NullPointerException {
-		
+		if (toFind == null) {
+			throw new NullPointerException();
+		}
 		utilities.Iterator<E> it = this.iterator();
 		
 		while (it.hasNext()) {
@@ -303,6 +307,7 @@ public class MyArrayList<E> implements ListADT<E> {
 	 * @throws  NullPointerException if the passed array is null 
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public E[] toArray(E[] toHold) throws NullPointerException {
 		
@@ -311,9 +316,7 @@ public class MyArrayList<E> implements ListADT<E> {
 		}
 		
 		if (toHold.length < size) {
-			@SuppressWarnings("unchecked")
-			E[] bigEnough = (E[]) new Object[size];
-			toHold = bigEnough;
+		    toHold = (E[]) java.lang.reflect.Array.newInstance(toHold.getClass().getComponentType(), size);
 		}
 		
 		for (int i = 0; i < size; i++) {

@@ -45,7 +45,7 @@ public class MyDLL<E> implements ListADT<E>{
 		 */
 		@Override
 		public boolean hasNext() {
-			return !(current.equals(tail)) ;
+			return current != null ;
 		}
 		
 		
@@ -56,14 +56,12 @@ public class MyDLL<E> implements ListADT<E>{
 		 */
 		@Override
 		public E next() throws NoSuchElementException {
-			if (hasNext()) {
-				MyDLLNode element = current;
-				current = current.next;
-				return element.item;
-			}
-			else {
-				throw new NoSuchElementException();
-			}
+			if (!hasNext()) {
+	            throw new NoSuchElementException();
+	        }
+	        E item = current.item;
+	        current = current.next;
+	        return item;
 		}
 		
 		public MyIterator() {
@@ -103,42 +101,50 @@ public class MyDLL<E> implements ListADT<E>{
 				if (toAdd == null) {
 					throw new NullPointerException();
 				}
-				if (index >= size || index < 0) {
+				if (index > size || index < 0) {
 					throw new IndexOutOfBoundsException();
 				}
 		
-				//empty
-				if (head == null) {
-					add(toAdd);
+				//list has 1 item or adding a last item
+				if (index == size) {
+					return add(toAdd);
 				}
-				//only one item
-				else if (head != null && tail == head) {
-					add(toAdd);
+				
+				else if (index == 0) {
+					MyDLLNode toInsert = new MyDLLNode(toAdd);
+					
+			        toInsert.next = head;
+			        head.prev = toInsert;
+			        head = toInsert;
+			        
+			        size++;
+			        
+			        return true;
 				}
-				//any other case (now the indexes actually matter)
+
+				//middle  	case 
 				else {
 					
 					MyDLLNode nodePointer = head;
-					for (int i = 0; i <= index; i++) {
-						if (i == index) {
-							//at this moment the nodePointer points to the node at index. 
-							MyDLLNode toInsert = new MyDLLNode(toAdd);
-							
-							toInsert.prev = nodePointer.prev;
-							toInsert.next = nodePointer;
-							nodePointer.prev = toInsert;
-							
-							size++;
-							
-							return true;
-						}
-						else {
-							nodePointer = nodePointer.next;
-						}
-					}
+					
+				    for (int i = 0; i < index; i++) {
+				        nodePointer = nodePointer.next;
+				    }
+
+				    MyDLLNode toInsert = new MyDLLNode(toAdd);
+				    
+				    toInsert.prev = nodePointer.prev;
+				    toInsert.next = nodePointer;
+				    nodePointer.prev.next = toInsert; 
+				    nodePointer.prev = toInsert;      
+
+				    size++;
+				    
+				    return true;
+					
 				}
 				
-				return false;
+
 		
 	}
 
@@ -151,17 +157,23 @@ public class MyDLL<E> implements ListADT<E>{
 	 */
 	@Override
 	public boolean add(E toAdd) throws NullPointerException {
+		if (toAdd == null) {
+			throw new NullPointerException();
+		}	
+		MyDLLNode nodeToAdd = new MyDLLNode(toAdd);
+		
+		
 				//empty
 				if (head == null) {
-					head = new MyDLLNode(toAdd);
-					tail = new MyDLLNode(toAdd);
+					head = nodeToAdd;
+					tail = nodeToAdd;
 					size++;
 					return true;
 				}
 				//only one item
-				else if (head != null && tail == head) {
+				else if (head != null && tail.equals(head)) {
 					
-					tail = new MyDLLNode(toAdd);
+					tail = nodeToAdd;
 					head.next = tail;
 					tail.prev = head;
 					size++;
@@ -170,7 +182,7 @@ public class MyDLL<E> implements ListADT<E>{
 				}
 				//any other case 
 				else {
-					MyDLLNode nodeToAdd = new MyDLLNode(toAdd);
+					
 	
 					nodeToAdd.prev = tail;
 					tail.next = nodeToAdd;
@@ -196,7 +208,7 @@ public class MyDLL<E> implements ListADT<E>{
 		}
 		
 		
-		utilities.Iterator<E> it = this.iterator();
+		utilities.Iterator<? extends E> it = toAdd.iterator();
 		
 		while (it.hasNext()) {
 			add(it.next());
@@ -249,11 +261,32 @@ public class MyDLL<E> implements ListADT<E>{
 				
 				MyDLLNode removed = nodePointer;
 				
-				nodePointer.prev.prev.next = nodePointer;
-				nodePointer.prev = nodePointer.prev.prev;
-				
+				if (nodePointer == head) {
+					head = nodePointer.next;
+					if (head != null) {
+						head.prev = null;
+						
+					} 
+					else {
+						tail = null;
+					}
+				}
+				else if (nodePointer == tail) {
+					tail = nodePointer.prev;
+			        if (tail != null) {
+			            tail.next = null;
+			            
+			        }
+			        else {
+			            head = null;
+			        }
+				}
+				else {
+					nodePointer.prev.next = nodePointer.next;
+			        nodePointer.next.prev = nodePointer.prev;
+
+				}
 				size--;
-				
 				return removed.item;
 			}
 			else {
@@ -277,22 +310,19 @@ public class MyDLL<E> implements ListADT<E>{
 			throw new NullPointerException();
 		}
 		
-		
 		MyDLLNode nodePointer = head;
+		int index = 0;
 		
-		if (nodePointer.item.equals(toRemove)) {
-			MyDLLNode removed = nodePointer;
-			
-			nodePointer.prev.prev.next = nodePointer;
-			nodePointer.prev = nodePointer.prev.prev;
-			
-			size--;
-			
-			return removed.item;
+		while (nodePointer != null) {
+			if (nodePointer.item.equals(toRemove)) {
+				return remove(index);
+			}
+			else {
+				index++;
+				nodePointer = nodePointer.next;
+			}
 		}
-		else {
-			nodePointer = nodePointer.next;
-		}
+
 		return null;
 	}
 
@@ -317,11 +347,11 @@ public class MyDLL<E> implements ListADT<E>{
 		for (int i = 0; i <= index; i++) {
 			if (i == index) {
 				
-				MyDLLNode overwriten = nodePointer;
+				E overwriten = nodePointer.item;
 				
 				nodePointer.item = toChange;
 				
-				return overwriten.item;
+				return overwriten;
 			}
 			else {
 				nodePointer = nodePointer.next;
@@ -353,13 +383,14 @@ public class MyDLL<E> implements ListADT<E>{
 			throw new NullPointerException();
 		}
 		MyDLLNode nodePointer = head;
-		if (nodePointer.item.equals(toFind)) {
-				
+		while (nodePointer != null) {
+			if (nodePointer.item.equals(toFind) ) {
 				return true;
 			}
 			else {
 				nodePointer = nodePointer.next;
 			}
+		}
 		return false;
 	}
 
@@ -371,6 +402,7 @@ public class MyDLL<E> implements ListADT<E>{
 	 * @throws  NullPointerException if the passed array is null 
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public E[] toArray(E[] toHold) throws NullPointerException {
 		if (toHold == null) {
@@ -378,10 +410,9 @@ public class MyDLL<E> implements ListADT<E>{
 		}
 		
 		if (toHold.length < size) {
-			@SuppressWarnings("unchecked")
-			E[] bigEnough = (E[]) new Object[size];
-			toHold = bigEnough;
+		    toHold = (E[]) java.lang.reflect.Array.newInstance(toHold.getClass().getComponentType(), size);
 		}
+		
 		MyDLLNode nodePointer = head;
 		for (int i = 0; i < size; i++) {
 		        toHold[i] = nodePointer.item;
