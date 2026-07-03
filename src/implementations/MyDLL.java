@@ -20,6 +20,10 @@ public class MyDLL<E> implements ListADT<E>{
 		private MyDLLNode next;
 		private MyDLLNode prev;
 		private E item;
+		
+		public MyDLLNode(E data) {
+			this.item = data;
+		}
 	}
 	
 	/**
@@ -57,7 +61,7 @@ public class MyDLL<E> implements ListADT<E>{
 		}
 		
 		public MyIterator() {
-			this.index = 0;
+			this.current = head;
 		}
 	}
 
