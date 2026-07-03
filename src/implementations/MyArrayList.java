@@ -297,7 +297,7 @@ public class MyArrayList<E> implements ListADT<E> {
 	}
 
 	/**
-	 * Translates to an array that we pass in
+	 * Translates to an array of type E that we pass in
 	 * @return the array that now contains the data from storage
 	 * @param toHold is the array we put data in
 	 * @throws  NullPointerException if the passed array is null 
@@ -316,8 +316,8 @@ public class MyArrayList<E> implements ListADT<E> {
 			toHold = bigEnough;
 		}
 		
-		for (int i = 0; i < this.size; i++) {
-		        toHold[i] = this.storage[i];
+		for (int i = 0; i < size; i++) {
+		        toHold[i] = storage[i];
 		}
 		
 		return toHold;
@@ -349,6 +349,17 @@ public class MyArrayList<E> implements ListADT<E> {
 	public MyArrayList(int capacity) {
 		
 		this.storage = (E[]) new Object[capacity];
+		this.size = 0;
+	}
+	
+	/**
+	 * constructor with null capacity
+	 * @param capacity the capacity of the underlying storage
+	 */
+	@SuppressWarnings("unchecked")
+	public MyArrayList() {
+		
+		this.storage = (E[]) new Object[0];
 		this.size = 0;
 	}
 	
