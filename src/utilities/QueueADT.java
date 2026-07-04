@@ -43,17 +43,42 @@ public interface QueueADT<E> {
      * @return iterator object
      */
     Iterator<E> iterator();
-    // Person 4 
+	
+    // Person 4 (Valentina)
 
+    /**
+     * returns an array containing all the items in the queue
+     * @return array with the elements of the queue
+     */
     Object[] toArray();
-  
+
+    /**
+     * returns an array containing all the items in the queue
+     * @param copy array used to store the elements
+     * @return array with the elements of the queue
+     */
     E[] toArray(E[] copy);
 
+    /**
+     * checks if the queue is full
+     * @return true if the queue is full
+     */
     boolean isFull();
 
+    /**
+     * returns the number of items in the queue
+     * @return the size of the queue
+     */
     int size();
 
+    /**
+     * checks if the queue is empty
+     * @return true if the queue has no items
+     */
     boolean isEmpty();
 
+    /**
+     * removes all items from the queue
+     */
     void dequeueAll();
 }
