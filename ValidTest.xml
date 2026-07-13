@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<library>
+    <books>
+        <book id="1">
+            <title>Java Programming</title>
+        </book>
+
+        <book id="2"/>
+    </books>
+</library>
