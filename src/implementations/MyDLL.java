@@ -1,14 +1,5 @@
 package implementations;
-/*
- * You will be penalized 50% of your final mark for the assignment if you use the java classes
-   from the java.util.*, or similar packages for the implementations of MyStack, MyQueue,
-   MyArrayList and MyDLL.
-   The exception is using the Arrays.copyOf() or System.arraycopy() methods to resize your array
-   in MyArrayList, the toArray methods and the Iterator implementations. You are also allowed to
-   use any of the standard exceptions in the Java library such as NullPointerException and
-   NoSuchElementException
 
- */
 import java.util.NoSuchElementException;
 
 import utilities.Iterator;

@@ -22,83 +22,113 @@ import utilities.QueueADT;
  */
 
 public class MyQueue<E> implements QueueADT<E> {
+	//structure to store the elements of the stack
 
+	MyDLL<E> list;
+	/**
+	 * Initializes an empty queue.
+	 */
+	public MyQueue() {
+	    this.list = new MyDLL<>();
+	}
 	@Override
 	public void enqueue(E toAdd) throws NullPointerException {
-		// TODO Auto-generated method stub
+		if (toAdd == null) {
+			throw new NullPointerException("Cannot enqueue a null element.");
+		}
+		list.add(toAdd);
 		
 	}
 
 	@Override
 	public E dequeue() throws EmptyQueueException {
-		// TODO Auto-generated method stub
-		return null;
+		if (isEmpty()) {
+			throw new EmptyQueueException("Cannot dequeue from an empty queue.");
+		}
+		return list.remove(0);
 	}
 
 	@Override
 	public E peek() throws EmptyQueueException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (isEmpty()) {
+			throw new EmptyQueueException("Cannot peek from an empty queue.");
+		}
+		return list.get(0);
 	}
 
 	@Override
 	public void dequeueAll() {
-		// TODO Auto-generated method stub
-		
+
+		list.clear();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return list.isEmpty();
 	}
 
 	@Override
 	public boolean contains(E toFind) throws NullPointerException {
-		// TODO Auto-generated method stub
-		return false;
+		
+		if (toFind == null) {
+			throw new NullPointerException("Cannot search for a null element.");
+		}
+		return list.contains(toFind);
 	}
 
 	@Override
 	public int search(E toFind) {
-		// TODO Auto-generated method stub
-		return 0;
+		for (int i = 0; i < list.size(); i++) {
+	        if (list.get(i).equals(toFind)) {
+	            return i + 1; // 1-based position (index 0 is search 1)
+	        }
+	    }
+	    return -1; // Not found
 	}
 
 	@Override
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		 return list.iterator();
 	}
 
 	@Override
-	public boolean equals(QueueADT<E> that) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean equals(QueueADT<E> secondQueue) {
+		Iterator<E> FirstQueue = this.iterator();
+		Iterator<E> SecondQueue = secondQueue.iterator();
+		//while both queues have elements (ensures same size), compare them one by one 
+		while (FirstQueue.hasNext() && SecondQueue.hasNext()) {
+			E FirstQueueElement = FirstQueue.next();
+			E secondQueueElement = SecondQueue.next();
+			if (!FirstQueueElement.equals(secondQueueElement)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		return list.toArray();
 	}
 
 	@Override
 	public E[] toArray(E[] holder) throws NullPointerException {
-		// TODO Auto-generated method stub
-		return null;
+		if (holder == null) {
+			throw new NullPointerException("The provided array is null.");
+		}
+		return list.toArray(holder);
 	}
 
 	@Override
 	public boolean isFull() {
-		// TODO Auto-generated method stub
+		// its not fixed size so it can never be full
 		return false;
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return list.size();
 	}
 
 }
